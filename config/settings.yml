@@ -1,0 +1,16 @@
+plugins:
+  json_s3_export_enabled:
+    default: false
+    client: false
+  json_s3_export_region:
+    default: ''
+    client: false
+  json_s3_export_bucket:
+    default: ''
+    client: false
+  json_s3_export_access_key:
+    default: ''
+    client: false
+  json_s3_export_secret_key:
+    default: ''
+    client: false
