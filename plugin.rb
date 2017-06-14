@@ -16,7 +16,6 @@ after_initialize do
       every 1.day
       def execute(args)
         return unless SiteSetting.json_s3_export_enabled
-        Discourse.enable_readonly_mode
 
         ActiveRecord::Base.subclasses.each do |ar_class|
           table_name = ar_class.table_name
@@ -45,8 +44,6 @@ after_initialize do
             Sidekiq.logger.error "Unable to upload #{ar_class.to_s}"
           end
         end
-      ensure
-        Discourse.disable_readonly_mode
       end
     end
   end
