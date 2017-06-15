@@ -37,7 +37,7 @@ after_initialize do
               end
 
               # Upload File to S3
-              upload_to_s3("#{table_name}/data-#{start}.gz")
+              upload_to_s3("#{table_name}/data-#{start}.gz", f)
 
               # schedule next set
               if group.size == BATCH_SIZE
@@ -51,9 +51,9 @@ after_initialize do
 
       private
 
-      def upload_to_s3(file_name)
+      def upload_to_s3(file_name, data)
         obj = s3.bucket(SiteSetting.json_s3_export_bucket).object(file_name)
-        obj.upload_file(f, server_side_encryption: 'AES256')
+        obj.upload_file(data, server_side_encryption: 'AES256')
       end
 
       def aws_client
