@@ -32,7 +32,7 @@ after_initialize do
 
               Zlib::GzipWriter.open(f) do |gz|
                 group.each do |record|
-                  gz.puts record.attributes.except(*BLACK_LISTED_COLUMNS[table_name])
+                  gz.puts record.attributes.except(*BLACK_LISTED_COLUMNS[table_name]).to_json
                 end
               end
 
