@@ -1,7 +1,6 @@
 en:
   site_settings:
     json_s3_export_enabled: "Is Json S3 Exporter enabled?"
-    json_s3_export_readonly: "Turn on Discourse readonly mode?"
     json_s3_export_access_key: 'What is AWS S3 access key?'
     json_s3_export_secret_key: 'What is AWS S3 secret key?'
     json_s3_export_region: 'What AWS region is your bucket in?'
