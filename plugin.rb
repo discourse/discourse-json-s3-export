@@ -80,7 +80,7 @@ after_initialize do
         BadgeGrouping, BadgeType, Badge, Category, CategoryFeaturedTopic,
         CategoryFeaturedUser, CategoryGroup, CategoryTagGroup, CategoryTag,
         CategoryUser, GroupMention, GroupUser, Group, PostActionType,
-        PostDetail, Post, TagGroup, TagUser, TopTopic, TopicTag,
+        PostDetail, Post, TagGroup, Tag, TagUser, TopTopic, TopicTag,
         TopicUser, Topic, UserAction, UserBadge, UserVisit, User
       ].freeze
 
