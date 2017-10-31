@@ -43,6 +43,7 @@ after_initialize do
               if group.size == BATCH_SIZE
                 Jobs.enqueue(:export_table_to_s3, class_name: ar_class.to_s,
                                                   start: group.last[ar_class.primary_key] + 1)
+                break
               end
             end
           end
