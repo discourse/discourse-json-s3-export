@@ -25,6 +25,11 @@ after_initialize do
         ar_class = args[:class_name].constantize
         start = args[:start] || 1
         table_name = ar_class.table_name
+
+        if SiteSetting.json_s3_clear_files_before_upload && start == 1
+          delete_existing_files!(table_name)
+        end
+
         ar_class.connection.transaction do
           ar_class.connection.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
           ar_class.all.find_in_batches(start: start, batch_size: BATCH_SIZE).with_index do |group, batch|
@@ -53,7 +58,7 @@ after_initialize do
       private
 
       def upload_to_s3(file_name, data)
-        obj = s3.bucket(SiteSetting.json_s3_export_bucket).object(file_name)
+        obj = s3_bucket.object(file_name)
         obj.upload_file(data, server_side_encryption: 'AES256')
       end
 
@@ -65,8 +70,13 @@ after_initialize do
         )
       end
 
-      def s3
+      def s3_bucket
         s3 = Aws::S3::Resource.new(client: aws_client)
+        s3.bucket(SiteSetting.json_s3_export_bucket)
+      end
+
+      def delete_existing_files!(prefix)
+        s3_bucket.objects.with_prefix(prefix).delete_all
       end
     end
   end
