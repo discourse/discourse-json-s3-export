@@ -26,7 +26,7 @@ after_initialize do
         start = args[:start] || 1
         table_name = ar_class.table_name
 
-        if SiteSetting.json_s3_clear_files_before_upload && start == 1
+        if SiteSetting.json_s3_export_clear_files_before_upload && start == 1
           delete_existing_files!(table_name)
         end
 

@@ -14,6 +14,6 @@ plugins:
   json_s3_export_secret_key:
     default: ''
     client: false
-  json_s3_clear_files_before_upload:
+  json_s3_export_clear_files_before_upload:
     default: false
     client: false
