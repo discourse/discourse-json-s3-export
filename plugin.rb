@@ -76,7 +76,7 @@ after_initialize do
       end
 
       def delete_existing_files!(prefix)
-        s3_bucket.objects.with_prefix(prefix).delete_all
+        s3_bucket.objects(prefix: prefix).batch_delete!
       end
     end
   end
