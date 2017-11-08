@@ -23,18 +23,17 @@ after_initialize do
 
       def execute(args)
         ar_class = args[:class_name].constantize
-        start = args[:start] || 1
+        start_id = args[:start_id] || 1
         table_name = ar_class.table_name
 
-        if SiteSetting.json_s3_export_clear_files_before_upload && start == 1
+        if SiteSetting.json_s3_export_clear_files_before_upload && start_id == 1
           delete_existing_files!(table_name)
         end
 
         ar_class.connection.transaction do
           ar_class.connection.execute('SET TRANSACTION ISOLATION LEVEL SERIALIZABLE')
-          ar_class.all.find_in_batches(start: start, batch_size: BATCH_SIZE).with_index do |group, batch|
-            Tempfile.open(table_name) do |f|
-
+          ar_class.all.find_in_batches(start: start_id, batch_size: BATCH_SIZE).with_index do |group, batch|
+            Tempfile.open("#{table_name}-#{start_id}") do |f|
               Zlib::GzipWriter.open(f) do |gz|
                 group.each do |record|
                   gz.puts record.attributes.except(*BLACK_LISTED_COLUMNS[table_name]).to_json
@@ -42,15 +41,13 @@ after_initialize do
               end
 
               # Upload File to S3
-              upload_to_s3("#{table_name}/data-#{start}.gz", f)
-
-              # schedule next set
-              if group.size == BATCH_SIZE
-                Jobs.enqueue(:export_table_to_s3, class_name: ar_class.to_s,
-                                                  start: group.last[ar_class.primary_key] + 1)
-                break
-              end
+              upload_to_s3("#{table_name}/data-#{start_id}.gz", f)
             end
+            # schedule next set
+            next_id = group.last[ar_class.primary_key] + 1
+            Jobs.enqueue(:export_table_to_s3, class_name: ar_class.to_s,
+                                              start_id: next_id)
+            break
           end
         end
       end
