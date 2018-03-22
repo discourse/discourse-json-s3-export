@@ -86,7 +86,7 @@ after_initialize do
 
       CLASSES_FOR_EXPORT = [
         BadgeGrouping, BadgeType, Badge, Category, CategoryFeaturedTopic,
-        CategoryFeaturedUser, CategoryGroup, CategoryTagGroup, CategoryTag,
+        CategoryGroup, CategoryTagGroup, CategoryTag,
         CategoryUser, GroupMention, GroupUser, Group, PostActionType,
         PostDetail, Post, TagGroup, Tag, TagUser, TopTopic, TopicTag,
         TopicUser, Topic, UserAction, UserBadge, UserVisit, User
